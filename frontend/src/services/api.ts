@@ -1,7 +1,6 @@
 import axios from 'axios';
 import useAuthStore from '../stores/authStore';
 
-// Create axios instance with base URL
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
 });
