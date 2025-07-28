@@ -196,11 +196,13 @@ const EnhancedTimeline: React.FC<EnhancedTimelineProps> = ({
     if (!item.dotColor || item.dotColor === 'grey') {
       return theme.palette.grey[500];
     }
-    
-    if (item.dotColor in theme.palette) {
-      return theme.palette[item.dotColor as keyof typeof theme.palette].main;
+
+    const color = theme.palette[item.dotColor as keyof typeof theme.palette];
+
+    if (color && typeof color === 'object' && 'main' in color) {
+      return (color as { main: string }).main;
     }
-    
+
     return item.dotColor;
   };
   
@@ -211,7 +213,7 @@ const EnhancedTimeline: React.FC<EnhancedTimelineProps> = ({
         p: 0,
         m: 0,
         ...sx,
-      }}
+      } as any}
     >
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
@@ -224,12 +226,12 @@ const EnhancedTimeline: React.FC<EnhancedTimelineProps> = ({
                   m: 'auto 0',
                   flex: 0.2,
                   padding: theme.spacing(1),
+                  textAlign: position === 'alternate' ? (index % 2 === 0 ? 'right' : 'left') : position === 'left' ? 'right' : 'left',
                 }}
-                align={position === 'alternate' ? (index % 2 === 0 ? 'right' : 'left') : position === 'left' ? 'right' : 'left'}
-                variant="body2"
-                color="text.secondary"
               >
-                {formatDate(item.date)}
+                <Typography variant="body2" color="text.secondary">
+                  {formatDate(item.date)}
+                </Typography>
               </TimelineOppositeContent>
             )}
             

@@ -243,7 +243,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
       if (e === null && newValue !== undefined) {
         // For components like DatePicker that pass value directly
         fieldValue = newValue;
-      } else if (type === 'checkbox') {
+      } else if (type === 'checkbox' && e?.target) {
         fieldValue = e.target.checked;
       } else if (e?.target) {
         fieldValue = e.target.value;
@@ -253,6 +253,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
       
       handleChange(name, fieldValue);
       if (onChange) onChange(fieldValue);
+    };
+
+    const handleSelectChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+      handleChange(name, e.target.value);
+      if (onChange) onChange(e.target.value);
+    };
+
+    const handleSliderChange = (event: Event, newValue: number | number[]) => {
+      handleChange(name, newValue);
+      if (onChange) onChange(newValue);
     };
     
     const handleFieldBlur = () => {
@@ -319,7 +329,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               id={name}
               name={name}
               value={value}
-              onChange={handleFieldChange}
+              onChange={handleSelectChange as any}
               onBlur={handleFieldBlur}
               label={label}
             >
@@ -350,7 +360,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               name={name}
               multiple
               value={Array.isArray(value) ? value : []}
-              onChange={handleFieldChange}
+              onChange={handleSelectChange as any}
               onBlur={handleFieldBlur}
               label={label}
             >
@@ -487,7 +497,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
             <Slider
               name={name}
               value={typeof value === 'number' ? value : 0}
-              onChange={handleFieldChange}
+              onChange={handleSliderChange}
               onBlur={handleFieldBlur}
               aria-labelledby={`${name}-label`}
               valueLabelDisplay="auto"

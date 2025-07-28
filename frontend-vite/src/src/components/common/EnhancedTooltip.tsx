@@ -178,10 +178,9 @@ const EnhancedTooltip: React.FC<EnhancedTooltipProps> = ({
     >
       {/* Ensure the children can receive focus and mouse events */}
       {React.isValidElement(children)
-        ? React.cloneElement(children, {
-            ...children.props,
+        ? React.cloneElement(children as React.ReactElement<any>, {
             // Ensure the element can be focused for keyboard users
-            tabIndex: children.props.tabIndex || 0,
+            tabIndex: (children.props as any).tabIndex || 0,
           })
         : <span>{children}</span>}
     </TooltipComponent>
